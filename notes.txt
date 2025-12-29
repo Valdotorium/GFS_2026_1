@@ -1,0 +1,8 @@
+LINKS:
+https://en.wikipedia.org/wiki/Pendulum_(mechanics)#Simple_gravity_pendulum
+https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_all.html
+https://www.youtube.com/watch?v=HPw1cqoBQZw (simple)
+https://www.youtube.com/watch?v=SZWn7x4g-Vo (university)
+https://www.youtube.com/watch?v=1Q15fgz-lUk (lang)
+https://www.myphysicslab.com/pendulum/reaction-pendulum-en.html (sim)
+https://www.myphysicslab.com/pendulum/pendulum-en.html (ideal pendulum)
