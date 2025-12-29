@@ -12,12 +12,22 @@
     </header>
     <main>
         <canvas id="pendulumCanvas" width="800" height="600"></canvas>
+        <div id="controls">
+            <label for="length">Length:</label>
+            <input type="number" id="length" value="140" min="50" max="400">
+            <label for="mass">Mass:</label>
+            <input type="number" id="mass" value="20" min="1" max="50">
+            <label for="angle">Initial Angle (degrees):</label>
+            <input type="number" id="angle" value="40" min="-90" max="90">
+            <button id="startButton">Start Simulation</button>
+        </div>
+        
+
         <script src="js/pendulum.js"></script>
-        </script>
+
     </main>
     <footer>
         <p>&copy; 2024 Pendulum Simulation</p>
     </footer>
 </body>
 </html>
-d

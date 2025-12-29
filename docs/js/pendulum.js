@@ -13,7 +13,7 @@ function drawPendulum(length, angle, mass) {
 
     //set center position
     const centerX = canvas.width / 2;
-    const centerY = canvas.height / 4;
+    const centerY = canvas.height / 2;
 
     //calculate the masses position, angle is in radians
     const bobX = centerX + length * Math.sin(angle);
@@ -39,11 +39,44 @@ function drawPendulum(length, angle, mass) {
 
 function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep) {
     //calculate angular acceleration
-    simulatePendulum(length, mass, angle, gravity, timeStep);
-
+    //simulatePendulum(length, mass, angle, gravity, timeStep);
     drawPendulum(length, angle, mass);
+    console.log("F")
+
+    //wait 1/50s, no physics
+    angle += 0.01;
+    setTimeout(function() {
+        updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
+    }, 20);
+
 }
 
+//start script on buton click
+document.getElementById("startButton").addEventListener("click", function() {
+    console.log("Starting pendulum simulation");
+    const length = document.getElementById("length").value;
+    const mass = document.getElementById("mass").value;
+    const angle = document.getElementById("angle").value * Math.PI / 180;
+    const gravity = 9.81; //m/s^2
+    const timeStep = 0.02; //s
 
-drawPendulum(200, Math.PI / 4, 20);
+    updatePendulum(length, mass, angle, 0, gravity, timeStep);
+
+});
+
+drawPendulum(140, 40 * Math.PI / 180, 20);
+
+//updating parameters when their value updates
+document.getElementById("controls").addEventListener("change", function() {
+    console.log("Starting pendulum simulation");
+    const length = document.getElementById("length").value;
+    const mass = document.getElementById("mass").value;
+    const angle = document.getElementById("angle").value * Math.PI / 180;
+    const gravity = 9.81; //m/s^2
+    const timeStep = 0.02; //s
+
+    drawPendulum(length, angle, mass);
+
+});
+
 
