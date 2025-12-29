@@ -1,6 +1,15 @@
 
-function simulatePendulum(length, mass, angle, gravity, timeStep, totalTime) {
+function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep) {
+    let angularAcceleration = 0;
 
+
+    //calculate angular acceleration
+    angularAcceleration = (-gravity / length) * Math.sin(angle);
+    
+    //update angular velocity
+    let newAngularVelocity = angularVelocity + angularAcceleration * timeStep;
+
+    return newAngularVelocity;
 }
 
 function drawPendulum(length, angle, mass) {    
@@ -40,13 +49,14 @@ function drawPendulum(length, angle, mass) {
 function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep) {
     //calculate angular acceleration
     //simulatePendulum(length, mass, angle, gravity, timeStep);
-    drawPendulum(length, angle, mass);
-    console.log("F")
+    let newAngularVelocity= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
+    let newAngle = angle + newAngularVelocity * timeStep;
+    drawPendulum(length, newAngle, mass);
+    console.log(angularVelocity)
 
-    //wait 1/50s, no physics
-    angle += 0.01;
+
     setTimeout(function() {
-        updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
+        updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep);
     }, 20);
 
 }
@@ -58,7 +68,7 @@ document.getElementById("startButton").addEventListener("click", function() {
     const mass = document.getElementById("mass").value;
     const angle = document.getElementById("angle").value * Math.PI / 180;
     const gravity = 9.81; //m/s^2
-    const timeStep = 0.02; //s
+    const timeStep = document.getElementById("timeStep").value; //s
 
     updatePendulum(length, mass, angle, 0, gravity, timeStep);
 
