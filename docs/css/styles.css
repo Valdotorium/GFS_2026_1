@@ -42,3 +42,6 @@ div p{
 #tangentialForce{
     color: #009900;
 }
+#showForces{
+    display:none
+}

@@ -209,7 +209,7 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
         //draw tangential force vector
         //calculate the end position of the tangential force vector
         const tangentialX = bobX + tangentialForce * forceScale * Math.cos(angle + Math.PI / 2);
-        const tangentialY = bobY + tangentialForce * forceScale * Math.sin(angle + Math.PI / 2);
+        const tangentialY = Math.abs(bobY + tangentialForce * forceScale * Math.sin(angle + Math.PI / 2));
         ctx.beginPath();
         ctx.moveTo(bobX, bobY);
         ctx.lineTo(tangentialX, tangentialY);
