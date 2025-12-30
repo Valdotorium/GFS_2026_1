@@ -26,3 +26,19 @@ div p{
     display:inline-block;
     margin-right: 20px;
 }
+
+.controlElement{
+    margin-bottom: 15px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+#gravityForce{
+    color: #0000ff;
+}
+#tensionForce{
+    color: #cc9900;
+}
+#tangentialForce{
+    color: #009900;
+}

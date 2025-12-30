@@ -16,23 +16,43 @@
 
             <p id = "potentialEnergy">Potential Energy: 0 J</p>
             <p id = "kineticEnergy">Kinetic Energy: 0 J</p>
-            <p id = "totalEnergy">Total Energy: 0 J</p>
+            <p id = "totalEnergy">Total Energy: 0 J</p> <br>
+            <p id= "tensionForce">Tension Force: 0 N</p>
+            <p id = "gravityForce">Gravity Force: 0 N</p>
+            <p id = "tangentialForce">Tangential Force: 0 N</p> <br>
             <p id = "time">t: 0 s</p>
 
         </div>
         <div id="controls">
+            <div class="controlElement">    
             <label for="length">Length (m):</label>
-            <input type="number" id="length" value="1.2" min="0.05" max="2">
+            <input type="number" id="length" value="1.2" min="0.1" max="2">
+            </div>
+            <div class="controlElement"> 
             <label for="mass">Mass (kg):</label>
-            <input type="number" id="mass" value="3" min="0.1" max="5">
+            <input type="number" id="mass" value="1" min="0.1" max="5">
+            </div>
+            <div class="controlElement"> 
             <label for="angle">Initial Angle (degrees):</label>
-            <br>
             <input type="number" id="angle" value="50" min="-180" max="180">
+            </div>
+            <br>
+            <div class="controlElement"> 
             <label for="timeStep" >Time Step:</label>
             <input type="number" id="timeStep" value="0.01"min="0.002" max="0.2">
+            </div>
+            <div class="controlElement">
+            <label for="gravity">Gravity (m/s²):</label>
+            <input type="number" id="gravity" value="9.81" min="0" max="20">
+            </div>
+            <br>
+            <div class="controlElement"> 
             <button id="startButton">Start Simulation</button>
             <label for="showForces">Show Forces</label>
             <input type="checkbox" id="showForces">
+            <label for="stopButton">Stop Simulation</label>
+            <input type="checkbox" id="stopButton">
+            </div>
 
         </div>
         
@@ -41,7 +61,7 @@
 
     </main>
     <footer>
-        <p>&copy; 2024 Pendulum Simulation</p>
+        <p>2025 Valdotorium</p>
     </footer>
 </body>
 </html>
