@@ -45,3 +45,13 @@ div p{
 #showForces{
     display:none
 }
+#info{
+    text-align: left;
+    margin-top: 0px;
+
+}
+
+#info p{
+    padding: none;
+    margin:none;
+}
