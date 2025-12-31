@@ -6,3 +6,9 @@ https://www.youtube.com/watch?v=SZWn7x4g-Vo (university)
 https://www.youtube.com/watch?v=1Q15fgz-lUk (lang)
 https://www.myphysicslab.com/pendulum/reaction-pendulum-en.html (sim)
 https://www.myphysicslab.com/pendulum/pendulum-en.html (ideal pendulum)
+https://de.wikipedia.org/wiki/Luftdichte (Luftdichte, wert)
+https://www.leifiphysik.de/mechanik/reibung-und-fortbewegung/grundwissen/luftreibung (LuWi)
+TODO:
+Formel verstehen
+ggf. bei Harti melden
+Termin vereinbaren

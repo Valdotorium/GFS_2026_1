@@ -16,11 +16,14 @@
 
             <p id = "potentialEnergy">Potential Energy: 0 J</p>
             <p id = "kineticEnergy">Kinetic Energy: 0 J</p>
-            <p id = "totalEnergy">Total Energy: 0 J</p> <br>
+            <p id = "totalEnergy">Total Energy: 0 J</p>
             <p id= "tensionForce">Tension Force: 0 N</p>
             <p id = "gravityForce">Gravity Force: 0 N</p>
-            <p id = "tangentialForce">Tangential Force: 0 N</p> <br>
-            <p id = "time">t: 0 s</p>
+            <p id = "tangentialForce">Tangential Force: 0 N</p> 
+            <p id = "dragForce">Drag Force: 0 N</p> 
+            <p id = "angleDisplay">Angle: 0 °</p>
+            <p id = "angularVelocityDisplay">Angular Velocity: 0 °/s</p>
+            <p id = "time">t: 0 s</p><br><br>
 
         </div>
         <div id="controls">
@@ -39,11 +42,15 @@
             <br>
             <div class="controlElement"> 
             <label for="timeStep" >Time Step:</label>
-            <input type="number" id="timeStep" value="0.01"min="0.002" max="0.2">
+            <input type="number" id="timeStep" value="0.0166"min="0.002" max="0.2">
             </div>
             <div class="controlElement">
             <label for="gravity">Gravity (m/s²):</label>
             <input type="number" id="gravity" value="9.81" min="0" max="20">
+            </div>
+            <div class="controlElement">
+            <label for="airResistance">Air Resistance Coefficient:</label>
+            <input type="number" id="airResistance" value="0.47" min="0" max="1" step="0.01">
             </div>
             <br>
             <div class="controlElement"> 
@@ -52,6 +59,8 @@
             <input type="checkbox" id="showForces">
             <label for="stopButton">Stop Simulation</label>
             <input type="checkbox" id="stopButton">
+            <label for="speedUp">Speed Up Simulation</label>
+            <input type="checkbox" id="speedUp">
             </div>
 
         </div>

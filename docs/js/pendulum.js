@@ -99,6 +99,28 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
     let angularAcceleration = 0;
     //calculate angular acceleration
     angularAcceleration = (-gravity / length) * Math.sin(angle);
+
+    //calculate air resistance
+    const airResistanceCoefficient = document.getElementById("airResistance").value; //dimensionless
+    const airDensity = 1.2; //kg/m^3
+    const bobRadius = Math.sqrt(mass) / Math.PI / 4; //basically like when drawing the bob, but without scaling to pixels
+    const bobCrossSectionalArea = Math.PI * bobRadius * bobRadius;
+    const dragForce = 0.5 * airResistanceCoefficient * airDensity * bobCrossSectionalArea * (length * angularVelocity) * (length * angularVelocity);
+    const dragAngularAcceleration = dragForce / (mass * length);
+
+    //subtract drag angular acceleration from angular acceleration
+    if(angularVelocity > 0) {
+        angularAcceleration -= dragAngularAcceleration;
+    } else {
+        angularAcceleration += dragAngularAcceleration;
+    }
+    //update drag force display
+    document.getElementById("dragForce").innerText = "Drag Force: " + dragForce.toFixed(2) + " N";
+    //update angle display in degrees
+    document.getElementById("angleDisplay").innerText = "Angle: " + (angle * 180 / Math.PI).toFixed(2) + " °";
+    //update angular velocity display in degrees per second
+    document.getElementById("angularVelocityDisplay").innerText = "Angular Velocity: " + (angularVelocity * 180 / Math.PI).toFixed(2) + " °/s";
+
     //source: (https://www.myphysicslab.com/pendulum/pendulum-de.html)
 
     //update angular velocity
@@ -126,6 +148,14 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     document.getElementById("totalEnergy").innerText = "Total Energy: " + (energies.potentialEnergy + energies.kineticEnergy).toFixed(1) + " J";
     document.getElementById("time").innerText = "t: " + (timeStep * frame).toFixed(2) + " s";
 
+    //check if user wants to speed up simulation
+    if (document.getElementById("speedUp").checked) {
+        var simulationSpeed = 50; //speed up by factor of 5
+    } else {
+        var simulationSpeed = 1; //normal speed
+    }
+
+
     //add functionality for a stop checkbox
     if(document.getElementById("stopButton").checked) {
         setTimeout(function() {
@@ -134,7 +164,7 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     }
     else{setTimeout(function() {
         updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame + 1, zoom);
-    }, 1 * timeStep * 1000)};
+    }, 1 * timeStep * 1000 / simulationSpeed)};
 
 }
 
@@ -177,9 +207,9 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
     
     //draw the bob
     ctx.beginPath();
-    const circleRadius = Math.sqrt(mass) / Math.PI;
+    const circleRadius = Math.sqrt(mass) / Math.PI  * (200 / length) / 4; //scale radius for better visibility
     console.log("Circle radius: " + circleRadius);
-    ctx.arc(bobX, bobY, circleRadius * 50, 0, 2 * Math.PI);
+    ctx.arc(bobX, bobY, circleRadius, 0, 2 * Math.PI);
     ctx.fillStyle = '#FF0000';
     ctx.fill();
     ctx.strokeStyle = '#000000';
@@ -259,6 +289,11 @@ document.getElementById("startButton").addEventListener("click", function() {
     const timeStep = document.getElementById("timeStep").value; //s
     let totalTime = 0;
     const zoom = 200 * (1 / length);
+
+    const bobRadius = Math.sqrt(mass) / Math.PI / 2; //basically like when drawing the bob, but without scaling to pixels
+    const bobCrossSectionalArea = Math.PI * bobRadius * bobRadius;
+    console.log("Bob cross sectional area: " + bobCrossSectionalArea);
+    console.log("bob radius: " + bobRadius);
 
     const energies = calculateEnergies(length, mass, angle, 0, gravity);
     document.getElementById("totalEnergy").innerText = (energies.potentialEnergy + energies.kineticEnergy).toFixed(2) + " J";
