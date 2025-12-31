@@ -115,7 +115,7 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
         angularAcceleration += dragAngularAcceleration;
     }
     //update drag force display
-    document.getElementById("dragForce").innerText = "Drag Force: " + dragForce.toFixed(2) + " N";
+    document.getElementById("dragForce").innerText = "Drag Force: " + dragForce.toFixed(4) + " N";
     //update angle display in degrees
     document.getElementById("angleDisplay").innerText = "Angle: " + (angle * 180 / Math.PI).toFixed(2) + " °";
     //update angular velocity display in degrees per second
