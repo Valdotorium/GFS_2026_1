@@ -55,3 +55,12 @@ div p{
     padding: none;
     margin:none;
 }
+
+#controls, #info {
+
+    background-color: #eeeeee;
+    border: 10px solid #eeeeee;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
