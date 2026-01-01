@@ -126,18 +126,30 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
     //update angular velocity
     let newAngularVelocity = angularVelocity + angularAcceleration * timeStep;
 
+
+
     return newAngularVelocity;
+}
+
+function updatePendulumPeak(angle, timeStep, frame, lastMaxAngle) {
+    //update the maximum angle display
+    document.getElementById("maxAngle").innerText = "Amplitude of latest period: " + (angle * 180 / Math.PI * 2).toFixed(2) + " °";
+    //update the period display
+    const period = (frame - lastMaxAngle) * timeStep;
+    console.log("Period: " + period + " s", frame, lastMaxAngle);
+    document.getElementById("period").innerText = "Period: " + period.toFixed(2) + " s";
 }
 
 
 
-function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom) {
+
+function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom, lastMaxAngleFrame) {
     //calculate angular acceleration
     //simulatePendulum(length, mass, angle, gravity, timeStep);
     let newAngularVelocity= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
     let newAngle = angle + newAngularVelocity * timeStep;
     drawPendulum(length, newAngle, mass, gravity, zoom);
-    console.log(frame)
+
 
     //calculate energies
     const energies = calculateEnergies(length, mass, newAngle, newAngularVelocity, gravity);
@@ -155,15 +167,22 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
         var simulationSpeed = 1; //normal speed
     }
 
-
+    //check if pendulum reached its peak
+    if(Math.sign(angularVelocity) != Math.sign(newAngularVelocity) && angularVelocity > 0) {
+        updatePendulumPeak(angle, timeStep, frame, lastMaxAngleFrame);
+        lastMaxAngleFrame = frame;
+    }
+    if (frame == 0){
+        updatePendulumPeak(angle, timeStep, frame, lastMaxAngleFrame);
+    }
     //add functionality for a stop checkbox
     if(document.getElementById("stopButton").checked) {
         setTimeout(function() {
-        updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom);
+        updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom, lastMaxAngleFrame);
     }, 1 * timeStep * 1000)
     }
     else{setTimeout(function() {
-        updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame + 1, zoom);
+        updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame + 1, zoom, lastMaxAngleFrame);
     }, 1 * timeStep * 1000 / simulationSpeed)};
 
 }
@@ -208,7 +227,7 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
     //draw the bob
     ctx.beginPath();
     const circleRadius = Math.sqrt(mass) / Math.PI  * (200 / length) / 4; //scale radius for better visibility
-    console.log("Circle radius: " + circleRadius);
+
     ctx.arc(bobX, bobY, circleRadius, 0, 2 * Math.PI);
     ctx.fillStyle = '#FF0000';
     ctx.fill();
@@ -272,7 +291,7 @@ document.getElementById("controls").addEventListener("change", function() {
     const gravity = document.getElementById("gravity").value; //m/s^2
     const timeStep = 0.02; //s
     const zoom = 200 * (1 / length);
-    console.log(zoom);
+
 
     drawPendulum(length, angle, mass, gravity, zoom);
 
@@ -292,7 +311,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 
     const energies = calculateEnergies(length, mass, angle, 0, gravity);
     document.getElementById("totalEnergy").innerText = (energies.potentialEnergy + energies.kineticEnergy).toFixed(2) + " J";
-    updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom);
+    updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom, 0);
 
 });
 

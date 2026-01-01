@@ -13,7 +13,7 @@
     <main>
         <canvas id="pendulumCanvas" width="800" height="600"></canvas>
         <div id="info">
-
+            <h4 id="infoHeader">Simulation Information (approximate):</h4>
             <p id = "potentialEnergy">Potential Energy: 0 J</p>
             <p id = "kineticEnergy">Kinetic Energy: 0 J</p>
             <p id = "totalEnergy">Total Energy: 0 J</p>
@@ -23,10 +23,14 @@
             <p id = "dragForce">Drag Force: 0 N</p> 
             <p id = "angleDisplay">Angle: 0 °</p>
             <p id = "angularVelocityDisplay">Angular Velocity: 0 °/s</p>
-            <p id = "time">t: 0 s</p><br><br>
+            <p id = "time">t: 0 s</p>
+            <p id = "period">Period: 0 s</p>
+            <p id = "maxAngle">Amplitude of latest period: 0 °</p>
+            <br><br>
 
         </div>
         <div id="controls">
+            <h4 id="controlsHeader">Simulation Controls:</h4>
             <div class="controlElement">    
             <label for="length">Length (m):</label>
             <input type="number" id="length" value="1.2" min="0.1" max="2">
