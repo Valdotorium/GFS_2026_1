@@ -144,6 +144,7 @@ function updatePendulumPeak(angle, timeStep, frame, lastMaxAngle) {
 
 
 function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom, lastMaxAngleFrame) {
+    const startTime = performance.now();
     //calculate angular acceleration
     //simulatePendulum(length, mass, angle, gravity, timeStep);
     let newAngularVelocity= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
@@ -175,6 +176,8 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     if (frame == 0){
         updatePendulumPeak(angle, timeStep, frame, lastMaxAngleFrame);
     }
+    const endTime = performance.now();
+    const computationTime = endTime - startTime;
     //add functionality for a stop checkbox
     if(document.getElementById("stopButton").checked) {
         setTimeout(function() {
@@ -183,7 +186,7 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     }
     else{setTimeout(function() {
         updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame + 1, zoom, lastMaxAngleFrame);
-    }, 1 * timeStep * 1000 / simulationSpeed)};
+    }, 1 * timeStep * 1000 / simulationSpeed - computationTime)};
 
 }
 
