@@ -103,7 +103,7 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
     //calculate air resistance
     const airResistanceCoefficient = document.getElementById("airResistance").value; //dimensionless
     const airDensity = 1.2; //kg/m^3
-    const bobRadius = Math.sqrt(mass) / Math.PI / 4; //basically like when drawing the bob, but without scaling to pixels
+    const bobRadius = document.getElementById("radius").value / 100; //basically like when drawing the bob, but without scaling to pixels
     const bobCrossSectionalArea = Math.PI * bobRadius * bobRadius;
     const dragForce = 0.5 * airResistanceCoefficient * airDensity * bobCrossSectionalArea * (length * angularVelocity) * (length * angularVelocity);
     const dragAngularAcceleration = dragForce / (mass * length); 
@@ -226,7 +226,7 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
     
     //draw the bob
     ctx.beginPath();
-    const circleRadius = Math.sqrt(mass) / Math.PI  * (200 / length) / 4; //scale radius for better visibility
+    const circleRadius = document.getElementById("radius").value / 100 * (200 / length); //scale radius with zoom level
 
     ctx.arc(bobX, bobY, circleRadius, 0, 2 * Math.PI);
     ctx.fillStyle = '#FF0000';
@@ -316,7 +316,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 });
 
 //initial draw
-drawPendulum(1.2, 50 * Math.PI / 180, 1, 9.81, 200);
+drawPendulum(1, 50 * Math.PI / 180, 1, 9.81, 200);
 
 
 
