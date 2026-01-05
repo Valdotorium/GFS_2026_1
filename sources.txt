@@ -1,0 +1,11 @@
+QUELLEN
+
+https://en.wikipedia.org/wiki/Pendulum_(mechanics)#Simple_gravity_pendulum (Formeln)
+https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_all.html
+https://www.youtube.com/watch?v=HPw1cqoBQZw 
+https://www.myphysicslab.com/pendulum/reaction-pendulum-en.html 
+https://www.myphysicslab.com/pendulum/pendulum-en.html (ideales Pendel, Formeln)
+https://de.wikipedia.org/wiki/Luftdichte (Luftdichte, Wert)
+https://www.leifiphysik.de/mechanik/reibung-und-fortbewegung/grundwissen/luftreibung (Luftwiderstand, Formeln)
+https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-oscillations/a/trig-and-forces-the-pendulum 
+

@@ -11,7 +11,7 @@
         <h1>Pendulum Canvas Simulation</h1>
     </header>
     <main>
-        <canvas id="pendulumCanvas" width="800" height="600"></canvas>
+
         <div id="info">
             <h4 id="infoHeader">Simulation Information (approximate):</h4>
             <p id = "potentialEnergy">Potential Energy: 0 J</p>
@@ -29,15 +29,24 @@
             <br><br>
 
         </div>
+        <canvas id="pendulumCanvas" width="800" height="600"></canvas>
         <div id="controls">
-            <h4 id="controlsHeader">Simulation Controls:</h4>
+            <div class="controlElement"> 
+            <button id="startButton">Start Simulation</button>
+            <label for="showForces" id="showForces">Show Forces</label>
+            <input type="checkbox" id="showForces">
+            <label for="stopButton">Stop Simulation</label>
+            <input type="checkbox" id="stopButton">
+            <label for="speedUp">Speed Up Simulation</label>
+            <input type="checkbox" id="speedUp">
+            </div> <br>
             <div class="controlElement">    
             <label for="length">Length (m):</label>
-            <input type="number" id="length" value="0.5" min="0.1" max="2">
+            <input type="number" id="length" value="0.38" min="0.1" max="2">
             </div>
             <div class="controlElement"> 
             <label for="mass">Mass (kg):</label>
-            <input type="number" id="mass" value="1" min="0.1" max="5">
+            <input type="number" id="mass" value="0.045" min="0.1" max="5">
             </div>
             <div class="controlElement"> 
             <label for="angle">Initial Angle (degrees):</label>
@@ -58,18 +67,9 @@
             </div>
             <div class="controlElement"> 
             <label for="radius">Mass radius (cm):</label>
-            <input type="number" id="radius" value="5" min="0.25" max="50">
+            <input type="number" id="radius" value="2.1" min="0.25" max="50">
             </div>
-            <br>
-            <div class="controlElement"> 
-            <button id="startButton">Start Simulation</button>
-            <label for="showForces" id="showForces">Show Forces</label>
-            <input type="checkbox" id="showForces">
-            <label for="stopButton">Stop Simulation</label>
-            <input type="checkbox" id="stopButton">
-            <label for="speedUp">Speed Up Simulation</label>
-            <input type="checkbox" id="speedUp">
-            </div>
+            
 
         </div>
         

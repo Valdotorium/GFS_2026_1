@@ -319,7 +319,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 });
 
 //initial draw
-drawPendulum(1, 50 * Math.PI / 180, 1, 9.81, 200);
+drawPendulum(0.38, 45 * Math.PI / 180, 0.045, 9.81, 200 / 0.38);
 
 
 
