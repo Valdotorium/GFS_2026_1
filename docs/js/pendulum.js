@@ -9,7 +9,9 @@ function checkValues(){
     const gravity = document.getElementById("gravity").value;
     const radius = document.getElementById("radius").value;
     const timeStep = document.getElementById("timeStep").value;
+    const airResistance = document.getElementById("airResistance").value;
 
+    //check ranges
     if(length < 0.001) document.getElementById("length").value = 0.001;
     if(length > 100) document.getElementById("length").value = 100;
 
@@ -28,6 +30,8 @@ function checkValues(){
     if(timeStep < 0.0001) document.getElementById("timeStep").value = 0.0001;
     if(timeStep > 1) document.getElementById("timeStep").value = 1;
 
+    if(airResistance < 0) document.getElementById("airResistance").value = 0;
+    if(airResistance > 5) document.getElementById("airResistance").value = 5;
 
 }
 
@@ -153,7 +157,7 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
 
     //update angular velocity
     let newAngularVelocity = angularVelocity + angularAcceleration * timeStep;
-    return newAngularVelocity;
+    return {newAngularVelocity, dragForce};
 }
 
 //function to update the peak angle and period display, called when pendulum reaches its peak once every period
@@ -167,7 +171,7 @@ function updatePendulumPeak(angle, timeStep, frame, lastMaxAngle) {
 }
 
 //function to update most displayed values
-function updateDisplays(length, mass, angle, angularVelocity, gravity, timeStep, frame) {
+function updateDisplays(length, mass, angle, angularVelocity, gravity, timeStep, frame, dragForce) {
     //calculate energies
     const energies = calculateEnergies(length, mass, angle, angularVelocity, gravity);
     
@@ -191,19 +195,11 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
 
     //calculate angular acceleration
 
-    let newAngularVelocity= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
+    let newData= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
+    let newAngularVelocity = newData.newAngularVelocity;
+    let dragForce = newData.dragForce;
     let newAngle = angle + newAngularVelocity * timeStep;
     drawPendulum(length, newAngle, mass, gravity, zoom);
-
-
-    //calculate energies
-    const energies = calculateEnergies(length, mass, newAngle, newAngularVelocity, gravity);
-
-    //display the energies
-    document.getElementById("potentialEnergy").innerText = "Potential Energy: " + energies.potentialEnergy.toFixed(2) + " J";
-    document.getElementById("kineticEnergy").innerText = "Kinetic Energy: " + energies.kineticEnergy.toFixed(2) + " J";
-    document.getElementById("totalEnergy").innerText = "Total Energy: " + (energies.potentialEnergy + energies.kineticEnergy).toFixed(1) + " J";
-    document.getElementById("time").innerText = "t: " + (timeStep * frame).toFixed(2) + " s";
 
     //check if user wants to speed up simulation
     if (document.getElementById("speedUp").checked) {
@@ -222,7 +218,7 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     }
 
     //update other displays
-    updateDisplays(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame);
+    updateDisplays(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame, dragForce);
 
     //ending time measurement
     const endTime = performance.now();
@@ -360,6 +356,9 @@ document.getElementById("controls").addEventListener("change", function() {
 //start script on button click, remove button after click
 document.getElementById("startButton").addEventListener("click", function() {
     console.log("Starting pendulum simulation");
+    //check input values
+    checkValues();
+    //set initial parameters
     const length = document.getElementById("length").value;
     const mass = document.getElementById("mass").value;
     const angle = document.getElementById("angle").value * Math.PI / 180;
@@ -367,14 +366,14 @@ document.getElementById("startButton").addEventListener("click", function() {
     const timeStep = document.getElementById("timeStep").value; //s
     let totalTime = 0;
     const zoom = 200 * (1 / length);
-
     const energies = calculateEnergies(length, mass, angle, 0, gravity);
     document.getElementById("totalEnergy").innerText = (energies.potentialEnergy + energies.kineticEnergy).toFixed(2) + " J";
-    updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom, 0);
 
     //make the startButton dissapear
     document.getElementById("startButton").style.display = "none";
 
+    //start the update loop
+    updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom, 0);
 });
 
 //initial draw
