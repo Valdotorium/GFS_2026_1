@@ -1,3 +1,32 @@
+function checkValues(){
+    //ensure that all input values are within reasonable ranges
+    const length = document.getElementById("length").value;
+    const mass = document.getElementById("mass").value;
+    const angle = document.getElementById("angle").value;
+    const gravity = document.getElementById("gravity").value;
+    const radius = document.getElementById("radius").value;
+    const timeStep = document.getElementById("timeStep").value;
+
+    if(length < 0.001) document.getElementById("length").value = 0.001;
+    if(length > 100) document.getElementById("length").value = 100;
+
+    if(mass < 0.0001) document.getElementById("mass").value = 0.0001;
+    if(mass > 1000) document.getElementById("mass").value = 1000;
+
+    if(angle < -1000) document.getElementById("angle").value = -1000;
+    if(angle > 1000) document.getElementById("angle").value = 1000;
+
+    if(gravity < 0) document.getElementById("gravity").value = 0;
+    if(gravity > 20) document.getElementById("gravity").value = 20;
+
+    if(radius < 0.01) document.getElementById("radius").value = 0.01;
+    if(radius > 100) document.getElementById("radius").value = 100;
+
+    if(timeStep < 0.0001) document.getElementById("timeStep").value = 0.0001;
+    if(timeStep > 1) document.getElementById("timeStep").value = 1;
+
+    
+}
 
 function drawGrid(length, canvas, ctx) {
 
