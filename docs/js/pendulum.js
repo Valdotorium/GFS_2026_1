@@ -1,3 +1,6 @@
+
+
+//function to check input values and correct them if they are out of bounds
 function checkValues(){
     //ensure that all input values are within reasonable ranges
     const length = document.getElementById("length").value;
@@ -25,9 +28,10 @@ function checkValues(){
     if(timeStep < 0.0001) document.getElementById("timeStep").value = 0.0001;
     if(timeStep > 1) document.getElementById("timeStep").value = 1;
 
-    
+
 }
 
+//function for drawing a grid on the canvas
 function drawGrid(length, canvas, ctx) {
 
     //draw a grid divided into meters, one meter is 200/length pixels
@@ -74,7 +78,7 @@ function drawGrid(length, canvas, ctx) {
     }
     ctx.strokeStyle = '#AAAAAA';
     ctx.lineWidth = 2;
-    //lines for full meters
+    //always draw full meter lines
     for(let i = -10; i <= 10; i++) {
         //vertical lines
         ctx.beginPath();
@@ -99,7 +103,7 @@ function drawGrid(length, canvas, ctx) {
         ctx.stroke();
         ctx.fillStyle = '#000000';
         ctx.font = '12px Arial';
-        ctx.fillText('0.1 m / 2 N', 25 + meterInPixels / 10, 25);
+        ctx.fillText('0.1 m', 25 + meterInPixels / 10, 25);
     }
     else { if(meterInPixels > 150 && meterInPixels <= 300) {
         //draw a reference line for 0,25m in the top left corner with a label
@@ -109,7 +113,7 @@ function drawGrid(length, canvas, ctx) {
         ctx.stroke();
         ctx.fillStyle = '#000000';
         ctx.font = '12px Arial';
-        ctx.fillText('0.25 m / 5 N', 25 + meterInPixels / 4, 25);
+        ctx.fillText('0.25 m', 25 + meterInPixels / 4, 25);
     }
     else {
         //draw a reference line for 1m in the top left corner with a label
@@ -119,11 +123,12 @@ function drawGrid(length, canvas, ctx) {
         ctx.stroke();
         ctx.fillStyle = '#000000';
         ctx.font = '12px Arial';
-        ctx.fillText('1 m / 20 N', 25 + meterInPixels, 25);
+        ctx.fillText('1 m', 25 + meterInPixels, 25);
     }}
 
 }
 
+//function for simulating the pendulums angular velocity with drag
 function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep) {
     let angularAcceleration = 0;
     //calculate angular acceleration
@@ -143,23 +148,15 @@ function simulatePendulum(length, mass, angle, angularVelocity, gravity, timeSte
     } else {
         angularAcceleration += dragAngularAcceleration;
     }
-    //update drag force display
-    document.getElementById("dragForce").innerText = "Drag Force: " + dragForce.toFixed(4) + " N";
-    //update angle display in degrees
-    document.getElementById("angleDisplay").innerText = "Angle: " + (angle * 180 / Math.PI).toFixed(2) + " °";
-    //update angular velocity display in degrees per second
-    document.getElementById("angularVelocityDisplay").innerText = "Angular Velocity: " + (angularVelocity * 180 / Math.PI).toFixed(2) + " °/s";
 
     //source: (https://www.myphysicslab.com/pendulum/pendulum-de.html)
 
     //update angular velocity
     let newAngularVelocity = angularVelocity + angularAcceleration * timeStep;
-
-
-
     return newAngularVelocity;
 }
 
+//function to update the peak angle and period display, called when pendulum reaches its peak once every period
 function updatePendulumPeak(angle, timeStep, frame, lastMaxAngle) {
     //update the maximum angle display
     document.getElementById("maxAngle").innerText = "Amplitude of latest period: " + (angle * 180 / Math.PI * 2).toFixed(2) + " °";
@@ -169,13 +166,31 @@ function updatePendulumPeak(angle, timeStep, frame, lastMaxAngle) {
     document.getElementById("period").innerText = "Period: " + period.toFixed(2) + " s";
 }
 
+//function to update most displayed values
+function updateDisplays(length, mass, angle, angularVelocity, gravity, timeStep, frame) {
+    //calculate energies
+    const energies = calculateEnergies(length, mass, angle, angularVelocity, gravity);
+    
+    //display the energies
+    document.getElementById("potentialEnergy").innerText = "Potential Energy: " + energies.potentialEnergy.toFixed(2) + " J";
+    document.getElementById("kineticEnergy").innerText = "Kinetic Energy: " + energies.kineticEnergy.toFixed(2) + " J";
+    document.getElementById("totalEnergy").innerText = "Total Energy: " + (energies.potentialEnergy + energies.kineticEnergy).toFixed(1) + " J";
+    document.getElementById("time").innerText = "t: " + (timeStep * frame).toFixed(2) + " s";
+    //update drag force display
+    document.getElementById("dragForce").innerText = "Drag Force: " + dragForce.toFixed(4) + " N";
+    //update angle display in degrees
+    document.getElementById("angleDisplay").innerText = "Angle: " + (angle * 180 / Math.PI).toFixed(2) + " °";
+    //update angular velocity display in degrees per second
+    document.getElementById("angularVelocityDisplay").innerText = "Angular Velocity: " + (angularVelocity * 180 / Math.PI).toFixed(2) + " °/s";
+}
 
-
-
+//main update function for the pendulum, first simulates, and then draws the pendulum and updates displays. Calls itself.
 function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom, lastMaxAngleFrame) {
+    //starting time measurement to measure computation time of the frame
     const startTime = performance.now();
+
     //calculate angular acceleration
-    //simulatePendulum(length, mass, angle, gravity, timeStep);
+
     let newAngularVelocity= simulatePendulum(length, mass, angle, angularVelocity, gravity, timeStep);
     let newAngle = angle + newAngularVelocity * timeStep;
     drawPendulum(length, newAngle, mass, gravity, zoom);
@@ -205,22 +220,26 @@ function updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep,
     if (frame == 0){
         updatePendulumPeak(angle, timeStep, frame, lastMaxAngleFrame);
     }
+
+    //update other displays
+    updateDisplays(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame);
+
+    //ending time measurement
     const endTime = performance.now();
     const computationTime = endTime - startTime;
-    //add functionality for a stop checkbox
+    //stopping the simulation = not updating the values relevant for simulation
     if(document.getElementById("stopButton").checked) {
         setTimeout(function() {
         updatePendulum(length, mass, angle, angularVelocity, gravity, timeStep, frame, zoom, lastMaxAngleFrame);
     }, 1 * timeStep * 1000)
     }
+    //updating pendulum with new values when simulation is running
     else{setTimeout(function() {
         updatePendulum(length, mass, newAngle, newAngularVelocity, gravity, timeStep, frame + 1, zoom, lastMaxAngleFrame);
     }, 1 * timeStep * 1000 / simulationSpeed - computationTime)};
-
 }
 
-
-
+//function to roughly calculate potential and kinetic energy. Unprecise when used with large time steps.
 function calculateEnergies(length, mass, angle, angularVelocity, gravity) {
     //calculate potential energy
     const height = length * (1 - Math.cos(angle));
@@ -232,14 +251,28 @@ function calculateEnergies(length, mass, angle, angularVelocity, gravity) {
     return {potentialEnergy, kineticEnergy};
 }
 
+//function to calculate forces acting on the pendulum bob and update their displayed values.
+function calculateForces(length, mass, angle, gravity) {
+
+    //calculate forces
+    const gravityForce = mass * gravity;
+    const tangentialForce = Math.abs(mass * gravity * Math.sin(angle));
+    const tensionForce = Math.sqrt(gravityForce * gravityForce - tangentialForce * tangentialForce);
+
+    //and update labels for the force
+    document.getElementById("tensionForce").innerText = "Tension Force: " + tensionForce.toFixed(2) + " N";
+    document.getElementById("gravityForce").innerText = "Gravity Force: " + gravityForce.toFixed(2) + " N";
+    document.getElementById("tangentialForce").innerText = "Tangential Force: " + tangentialForce.toFixed(2) + " N";
+    return {gravityForce, tangentialForce, tensionForce};
+}
+
+//function to draw the pendulum on the canvas
 function drawPendulum(length, angle, mass, gravity, zoom) {
     const canvas = document.getElementById("pendulumCanvas");
     const ctx = canvas.getContext('2d');
-    //visualize forces acting on the pendulum bob
+    
     //clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
     //set center position
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
@@ -248,6 +281,7 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
     const bobX = centerX + length * Math.sin(angle) * zoom; //scale length for better visibility
     const bobY = centerY + length * Math.cos(angle) * zoom;
     drawGrid(length, canvas, ctx);
+
     //draw the rod
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
@@ -265,18 +299,15 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
     ctx.fill();
     ctx.strokeStyle = '#000000';
     ctx.stroke();
+
     //calculate forces
-    const gravityForce = mass * gravity;
-    const tangentialForce = Math.abs(mass * gravity * Math.sin(angle));
-    const tensionForce = Math.sqrt(gravityForce * gravityForce - tangentialForce * tangentialForce);
+    const forces = calculateForces(length, mass, angle, gravity);
+    const gravityForce = forces.gravityForce;
+    const tangentialForce = forces.tangentialForce;
+    const tensionForce = forces.tensionForce;
 
-    //and update labels for the force
-    document.getElementById("tensionForce").innerText = "Tension Force: " + tensionForce.toFixed(2) + " N";
-    document.getElementById("gravityForce").innerText = "Gravity Force: " + gravityForce.toFixed(2) + " N";
-    document.getElementById("tangentialForce").innerText = "Tangential Force: " + tangentialForce.toFixed(2) + " N";
-
-    //draw force vectors if checkbox is checked
-    if(document.getElementById("showForces").checked) {
+    //draw force vectors if checkbox is checked (temporarily removed because not working with certain angles)
+/*     if(document.getElementById("showForces").checked) {
         //draw gravity force vector
         //20N equal 200 / length pixels
         const forceScale = 200 / length / 20;
@@ -309,12 +340,9 @@ function drawPendulum(length, angle, mass, gravity, zoom) {
         ctx.strokeStyle = '#CC9900';
         ctx.lineWidth = 2;
         ctx.stroke();
-
-
-
-    }
+    } */
 }
-//updating parameters when their value updates
+//updating parameters in the controls when their value updates
 document.getElementById("controls").addEventListener("change", function() {
 
     const length = document.getElementById("length").value;
@@ -329,8 +357,7 @@ document.getElementById("controls").addEventListener("change", function() {
 
 });
 
-
-//start script on buton click
+//start script on button click, remove button after click
 document.getElementById("startButton").addEventListener("click", function() {
     console.log("Starting pendulum simulation");
     const length = document.getElementById("length").value;
@@ -344,6 +371,9 @@ document.getElementById("startButton").addEventListener("click", function() {
     const energies = calculateEnergies(length, mass, angle, 0, gravity);
     document.getElementById("totalEnergy").innerText = (energies.potentialEnergy + energies.kineticEnergy).toFixed(2) + " J";
     updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom, 0);
+
+    //make the startButton dissapear
+    document.getElementById("startButton").style.display = "none";
 
 });
 
