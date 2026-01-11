@@ -375,7 +375,10 @@ document.getElementById("startButton").addEventListener("click", function() {
     //start the update loop
     updatePendulum(length, mass, angle, 0, gravity, timeStep, totalTime, zoom, 0);
 });
-
+//set canvas height based on width to make it responsive
+var canvas = document.getElementById('pendulumCanvas');
+var heightRatio = 0.75; //height is 75% of width
+canvas.height = canvas.width * heightRatio;
 //initial draw
 drawPendulum(0.38, 45 * Math.PI / 180, 0.045, 9.81, 200 / 0.38);
 

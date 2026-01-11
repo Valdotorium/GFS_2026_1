@@ -53,7 +53,8 @@ div p{
 
 #info p{
     padding: none;
-    margin:none;
+    margin: 5px;
+
 }
 
 #controls, #info {
@@ -65,4 +66,7 @@ div p{
     margin-bottom: 20px;
 }
 
-
+#pendulumCanvas{
+    width: 80%;
+    object-fit: contain;
+}
